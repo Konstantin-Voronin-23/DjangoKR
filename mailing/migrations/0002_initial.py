@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("users", "0001_initial"),
-        ("mailing_service", "0001_initial"),
+        ("mailing", "0001_initial"),
     ]
 
     operations = [
@@ -27,20 +27,20 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name="attempts",
-                to="mailing_service.mailing",
+                to="mailing.mailing",
                 verbose_name="Рассылка",
             ),
         ),
         migrations.AddField(
             model_name="mailing",
             name="clients",
-            field=models.ManyToManyField(to="mailing_service.client", verbose_name="Клиенты"),
+            field=models.ManyToManyField(to="mailing.client", verbose_name="Клиенты"),
         ),
         migrations.AddField(
             model_name="mailing",
             name="message",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="mailing_service.message", verbose_name="Сообщение"
+                on_delete=django.db.models.deletion.CASCADE, to="mailing.message", verbose_name="Сообщение"
             ),
         ),
         migrations.AddField(

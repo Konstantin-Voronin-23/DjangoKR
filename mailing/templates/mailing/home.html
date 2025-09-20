@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Всего рассылок</h5>
+                <p class="card-text display-4">{{ total_mailings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Активные рассылки</h5>
+                <p class="card-text display-4">{{ active_mailings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Уникальные клиенты</h5>
+                <p class="card-text display-4">{{ unique_clients }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not user.is_authenticated %}
+<div class="jumbotron mt-5">
+    <h1 class="display-4">Добро пожаловать!</h1>
+    <p class="lead">Сервис управления email-рассылками</p>
+    <hr class="my-4">
+    <p>Для работы с системой необходимо войти или зарегистрироваться</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'users:login' %}" role="button">Войти</a>
+    <a class="btn btn-secondary btn-lg" href="{% url 'users:register' %}" role="button">Регистрация</a>
+</div>
+{% endif %}
+{% endblock %}

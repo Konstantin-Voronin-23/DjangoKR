@@ -26,7 +26,7 @@ class Message(models.Model):
     """Класс описывающий модель письма"""
 
     subject = models.CharField(max_length=250, verbose_name="Тема письма")
-    body = models.TextField(verbose_name="Письмо")
+    body = models.TextField(verbose_name="Тело письма")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
 
     class Meta:
