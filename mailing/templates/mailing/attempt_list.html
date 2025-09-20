@@ -1,0 +1,108 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Отчеты по рассылкам</h1>
+
+        <!-- Общая статистика -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">Всего попыток</h5>
+                        <p class="card-text display-4">{{ total_attempts }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Успешных</h5>
+                        <p class="card-text display-4">{{ successful_attempts }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Неудачных</h5>
+                        <p class="card-text display-4">{{ failed_attempts }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <h5 class="card-title">Успешность</h5>
+                        <p class="card-text display-4">{{ success_rate|floatformat:1 }}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Статистика по рассылкам -->
+        <h3>Статистика по рассылкам</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Рассылка</th>
+                    <th>Всего попыток</th>
+                    <th>Успешных</th>
+                    <th>Неудачных</th>
+                    <th>Успешность</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in mailing_stats %}
+                <tr>
+                    <td>{{ stat.mailing.message.subject }}</td>
+                    <td>{{ stat.total }}</td>
+                    <td class="text-success">{{ stat.success }}</td>
+                    <td class="text-danger">{{ stat.failed }}</td>
+                    <td>
+                        {% widthratio stat.success stat.total 100 as rate %}
+                        {{ rate|floatformat:1 }}%
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Нет данных о рассылках</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Детализация попыток -->
+        <h3>Детализация всех попыток</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Время попытки</th>
+                    <th>Рассылка</th>
+                    <th>Статус</th>
+                    <th>Ответ сервера</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt in attempts %}
+                <tr>
+                    <td>{{ attempt.attempt_time|date:"d.m.Y H:i:s" }}</td>
+                    <td>{{ attempt.mailing.message.subject }}</td>
+                    <td>
+                        <span class="badge {% if attempt.status == 'success' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ attempt.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ attempt.server_response|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Попыток рассылки пока нет</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
